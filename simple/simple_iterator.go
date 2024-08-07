@@ -1,0 +1,84 @@
+package simple
+
+import "errors"
+
+// Exhausted is an error that is returned when an iterator is exhausted. Callers
+// should return this error by itself and not wrap it as callers will test
+// this error using ==.
+//
+// This error should only be used when signaling graceful termination.
+var Exhausted error
+
+func init() {
+	Exhausted = errors.New("iterator is exhausted")
+}
+
+// Iterater is an interface that defines methods for an iterator over a
+// collection of elements of type T.
+type Iterater[T any] interface {
+	// Consume advances the iterator to the next element in the
+	// collection and returns the current element.
+	//
+	// Returns:
+	//  - T: The current element in the collection.
+	//  - error: An error if the iterator is exhausted or if an error occurred
+	//    while consuming the element.
+	Consume() (T, error)
+
+	// Restart resets the iterator to the beginning of the
+	// collection.
+	Restart()
+}
+
+// SimpleIterator is a struct that allows iterating over a slice of
+// elements of any type.
+type SimpleIterator[T any] struct {
+	// values is a slice of elements of type T.
+	values *[]T
+
+	// index is the current index of the iterator.
+	// 0 means not initialized.
+	index int
+}
+
+// Consume implements the Iterater interface.
+func (iter *SimpleIterator[T]) Consume() (T, error) {
+	if iter.index >= len(*iter.values) {
+		return *new(T), Exhausted
+	}
+
+	value := (*iter.values)[iter.index]
+
+	iter.index++
+
+	return value, nil
+}
+
+// Restart implements the Iterater interface.
+func (iter *SimpleIterator[T]) Restart() {
+	iter.index = 0
+}
+
+// NewSimpleIterator creates a new iterator over a slice of elements of type T.
+//
+// Parameters:
+//   - values: The slice of elements to iterate over.
+//
+// Return:
+//   - *SimpleIterator[T]: A new iterator over the given slice of elements.
+//
+// Behaviors:
+//   - If values is nil, the iterator is initialized with an empty slice.
+//   - Modifications to the slice of elements after creating the iterator will
+//     affect the values seen by the iterator.
+func NewSimpleIterator[T any](values []T) *SimpleIterator[T] {
+	if len(values) == 0 {
+		values = make([]T, 0)
+	}
+
+	si := &SimpleIterator[T]{
+		values: &values,
+		index:  0,
+	}
+	return si
+}

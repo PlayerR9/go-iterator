@@ -1,1 +1,1 @@
-package goiterator
+package iterators

@@ -1,24 +1,24 @@
-package iterators
+package procedural
 
-// SliceIterator is a struct that allows iterating over a collection of
+// ProceduralIterator is a struct that allows iterating over a collection of
 // iterators of type Iterater[T].
-type SliceIterator[T any] struct {
+type ProceduralIterator[E Iterable[T], T any] struct {
 	// source is the iterator over the collection of iterators.
-	source Iterater[[]T]
+	source Iterater[E]
 
 	// iter is the iterator in the collection.
-	iter *SimpleIterator[T]
+	iter Iterater[T]
 }
 
 // Consume implements the Iterater interface.
-func (pi *SliceIterator[T]) Consume() (T, error) {
+func (pi *ProceduralIterator[E, T]) Consume() (T, error) {
 	if pi.iter == nil {
-		values, err := pi.source.Consume()
+		iter, err := pi.source.Consume()
 		if err != nil {
 			return *new(T), err
 		}
 
-		pi.iter = NewSimpleIterator(values)
+		pi.iter = iter.Iterator()
 	}
 
 	var val T
@@ -39,14 +39,14 @@ func (pi *SliceIterator[T]) Consume() (T, error) {
 			return *new(T), err
 		}
 
-		pi.iter = NewSimpleIterator(iter)
+		pi.iter = iter.Iterator()
 	}
 
 	return val, nil
 }
 
 // Restart implements the Iterater interface.
-func (pi *SliceIterator[T]) Restart() {
+func (pi *ProceduralIterator[E, T]) Restart() {
 	pi.iter = nil
 	pi.source.Restart()
 }
@@ -60,14 +60,14 @@ func (pi *SliceIterator[T]) Restart() {
 //   - source: The iterator over the collection of iterators to iterate over.
 //
 // Return:
-//   - *SliceIterator[T]: The new iterator over the collection of elements.
+//   - *ProceduralIterator[E, T]: The new iterator over the collection of elements.
 //     Nil if source is nil.
-func NewSliceIterator[T any](source Iterater[[]T]) *SliceIterator[T] {
+func NewProceduralIterator[E Iterable[T], T any](source Iterater[E]) *ProceduralIterator[E, T] {
 	if source == nil {
 		return nil
 	}
 
-	pi := &SliceIterator[T]{
+	pi := &ProceduralIterator[E, T]{
 		source: source,
 		iter:   nil,
 	}

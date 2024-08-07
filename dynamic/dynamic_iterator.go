@@ -1,4 +1,4 @@
-package iterators
+package dynamic
 
 // DynamicIterator is a struct that allows iterating over a collection
 // of iterators of type Iterater[T].

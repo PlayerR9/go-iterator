@@ -1,4 +1,4 @@
-package iterators
+package slice
 
 import "errors"
 
@@ -11,17 +11,6 @@ var Exhausted error
 
 func init() {
 	Exhausted = errors.New("iterator is exhausted")
-}
-
-// Iterable is an interface that defines a method to get an iterator over a
-// collection of elements of type T. It is implemented by data structures that
-// can be iterated over.
-type Iterable[T any] interface {
-	// Iterator returns an iterator over the collection of elements.
-	//
-	// Returns:
-	//   - Iterater[T]: An iterator over the collection of elements.
-	Iterator() Iterater[T]
 }
 
 // Iterater is an interface that defines methods for an iterator over a

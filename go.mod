@@ -1,3 +1,3 @@
-module github.com/PlayerR9/go-iterator
+module github.com/PlayerR9/iterators
 
 go 1.22.5

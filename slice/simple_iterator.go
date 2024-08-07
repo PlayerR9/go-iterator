@@ -1,4 +1,4 @@
-package iterators
+package slice
 
 // SimpleIterator is a struct that allows iterating over a slice of
 // elements of any type.

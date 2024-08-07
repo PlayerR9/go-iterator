@@ -1,4 +1,4 @@
-package iterators
+package simple
 
 // Builder is a struct that allows building iterators over a collection of
 // elements.
