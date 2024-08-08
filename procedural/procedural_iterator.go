@@ -1,5 +1,7 @@
 package procedural
 
+import "io"
+
 // ProceduralIterator is a struct that allows iterating over a collection of
 // iterators of type Iterater[T].
 type ProceduralIterator[E Iterable[T], T any] struct {
@@ -30,7 +32,7 @@ func (pi *ProceduralIterator[E, T]) Consume() (T, error) {
 			break
 		}
 
-		if err != Exhausted {
+		if err != io.EOF {
 			return *new(T), err
 		}
 

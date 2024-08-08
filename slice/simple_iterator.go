@@ -1,5 +1,7 @@
 package slice
 
+import "io"
+
 // SimpleIterator is a struct that allows iterating over a slice of
 // elements of any type.
 type SimpleIterator[T any] struct {
@@ -14,7 +16,7 @@ type SimpleIterator[T any] struct {
 // Consume implements the Iterater interface.
 func (iter *SimpleIterator[T]) Consume() (T, error) {
 	if iter.index >= len(*iter.values) {
-		return *new(T), Exhausted
+		return *new(T), io.EOF
 	}
 
 	value := (*iter.values)[iter.index]

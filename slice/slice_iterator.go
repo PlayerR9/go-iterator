@@ -1,5 +1,7 @@
 package slice
 
+import "io"
+
 // SliceIterator is a struct that allows iterating over a collection of
 // iterators of type Iterater[T].
 type SliceIterator[T any] struct {
@@ -30,7 +32,7 @@ func (pi *SliceIterator[T]) Consume() (T, error) {
 			break
 		}
 
-		if err != Exhausted {
+		if err != io.EOF {
 			return *new(T), err
 		}
 

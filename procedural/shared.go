@@ -1,18 +1,5 @@
 package procedural
 
-import "errors"
-
-// Exhausted is an error that is returned when an iterator is exhausted. Callers
-// should return this error by itself and not wrap it as callers will test
-// this error using ==.
-//
-// This error should only be used when signaling graceful termination.
-var Exhausted error
-
-func init() {
-	Exhausted = errors.New("iterator is exhausted")
-}
-
 // Iterable is an interface that defines a method to get an iterator over a
 // collection of elements of type T. It is implemented by data structures that
 // can be iterated over.

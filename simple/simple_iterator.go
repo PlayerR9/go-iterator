@@ -1,17 +1,6 @@
 package simple
 
-import "errors"
-
-// Exhausted is an error that is returned when an iterator is exhausted. Callers
-// should return this error by itself and not wrap it as callers will test
-// this error using ==.
-//
-// This error should only be used when signaling graceful termination.
-var Exhausted error
-
-func init() {
-	Exhausted = errors.New("iterator is exhausted")
-}
+import "io"
 
 // Iterater is an interface that defines methods for an iterator over a
 // collection of elements of type T.
@@ -44,7 +33,7 @@ type SimpleIterator[T any] struct {
 // Consume implements the Iterater interface.
 func (iter *SimpleIterator[T]) Consume() (T, error) {
 	if iter.index >= len(*iter.values) {
-		return *new(T), Exhausted
+		return *new(T), io.EOF
 	}
 
 	value := (*iter.values)[iter.index]

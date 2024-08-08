@@ -1,5 +1,7 @@
 package dynamic
 
+import "io"
+
 // DynamicIterator is a struct that allows iterating over a collection
 // of iterators of type Iterater[T].
 type DynamicIterator[E, T any] struct {
@@ -34,7 +36,7 @@ func (di *DynamicIterator[E, T]) Consume() (T, error) {
 			break
 		}
 
-		if err != Exhausted {
+		if err != io.EOF {
 			return *new(T), err
 		}
 
